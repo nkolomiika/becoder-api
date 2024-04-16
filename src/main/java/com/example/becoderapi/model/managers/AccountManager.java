@@ -1,6 +1,7 @@
 package com.example.becoderapi.model.managers;
 
 import com.example.becoderapi.model.Account;
+import com.example.becoderapi.model.exceptions.NoAccountsException;
 import com.example.becoderapi.model.exceptions.NoSuchAccountException;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ public class AccountManager {
 
     public String getAllAccounts() {
         var sb = new StringBuilder();
+        if (this.accounts.isEmpty()) throw new NoAccountsException();
         this.accounts.forEach((id, acc) ->
                 sb.append(acc).append("\n")
         );

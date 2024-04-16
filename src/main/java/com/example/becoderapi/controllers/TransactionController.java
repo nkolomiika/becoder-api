@@ -15,12 +15,12 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping("/buy/{id}")
-    public ResponseEntity<Response> buy(@PathVariable("id") String id, Request request) {
+    public ResponseEntity<Response> buy(@PathVariable("id") String id,@RequestBody Request request) {
         return ResponseEntity.ok(transactionService.buy(request));
     }
 
     @PostMapping("/sell/{id}")
-    public ResponseEntity<Response> sell(@PathVariable("id") String id, Request request) {
+    public ResponseEntity<Response> sell(@PathVariable("id") String id,@RequestBody Request request) {
         return ResponseEntity.ok(transactionService.sell(request));
     }
 

@@ -23,7 +23,7 @@ public class TransactionService {
 
         admin.setBalance(aBalance + request.cost());
         return new Response(String.format(
-                "Success transaction! Balance now is %s, user id %s", aBalance, admin.getId()
+                "Success transaction! Balance now is %s, user id %s", admin.getBalance(), admin.getId()
         ));
     }
 
@@ -37,7 +37,7 @@ public class TransactionService {
 
         admin.setBalance(aBalance - request.cost());
         return new Response(String.format(
-                "Success transaction! Balance now is %s, user id %s", aBalance, admin.getId()
+                "Success transaction! Balance now is %s, user id %s", admin.getBalance(), admin.getId()
         ));
     }
 

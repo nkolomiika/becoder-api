@@ -3,6 +3,7 @@ package com.example.becoderapi.controllers;
 import com.example.becoderapi.model.dto.Request;
 import com.example.becoderapi.model.dto.Response;
 import com.example.becoderapi.model.exceptions.NegativeCostException;
+import com.example.becoderapi.model.exceptions.NoAccountsException;
 import com.example.becoderapi.model.exceptions.NoSuchAccountException;
 import com.example.becoderapi.model.exceptions.NotEnoughMoneyException;
 import com.example.becoderapi.services.TransactionService;
@@ -43,7 +44,8 @@ public class TransactionController {
     }
 
     @ExceptionHandler(value = {
-            NoSuchAccountException.class, NotEnoughMoneyException.class, NegativeCostException.class})
+            NoSuchAccountException.class, NotEnoughMoneyException.class,
+            NegativeCostException.class, NoAccountsException.class})
     public ResponseEntity<Response> handleNoAccount(RuntimeException exception) {
         return ResponseEntity.badRequest().body(
                 new Response(

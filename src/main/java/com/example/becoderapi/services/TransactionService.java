@@ -1,8 +1,9 @@
 package com.example.becoderapi.services;
 
-import com.example.becoderapi.model.Account;
 import com.example.becoderapi.model.dto.Request;
 import com.example.becoderapi.model.dto.Response;
+import com.example.becoderapi.model.exceptions.NoSuchAccountException;
+import com.example.becoderapi.model.managers.AccountManager;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,16 +11,18 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class TransactionService {
 
-    private Account admin;
+    private AccountManager manager;
 
-    public Response buy(Request request) {
+    public Response buy(Request request) throws NoSuchAccountException {
+        var admin = manager.getAccountById(request.id());
         admin.setBalance(admin.getBalance() + request.cost());
         return new Response(String.format(
                 "Success transaction! Balance now is %s, user id %s", admin.getBalance(), admin.getId()
         ));
     }
 
-    public Response sell(Request request) {
+    public Response sell(Request request) throws NoSuchAccountException {
+        var admin = manager.getAccountById(request.id());
         admin.setBalance(admin.getBalance() - request.cost());
         return new Response(String.format(
                 "Success transaction! Balance now is %s, user id %s", admin.getBalance(), admin.getId()
@@ -27,8 +30,14 @@ public class TransactionService {
     }
 
     public Response info() {
-        return new Response(String.format(
-                "ID : %s\nBalance : %s", admin.getId(), admin.getBalance()
-        ));
+        return new Response(
+                manager.getAllAccounts()
+        );
+    }
+
+    public Response createAccount() {
+        return new Response(
+                manager.createAccount()
+        );
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GeneralExceptionController {
 
     @ExceptionHandler(value = {TransactionRuntimeException.class})
-    public ResponseEntity<Response> handleNoAccount(RuntimeException exception) {
+    public ResponseEntity<Response> handleTransactionRuntimeException(RuntimeException exception) {
         return ResponseEntity.badRequest().body(
                 new Response(
                         exception.getMessage()

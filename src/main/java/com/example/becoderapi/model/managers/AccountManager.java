@@ -1,3 +1,4 @@
+/*
 package com.example.becoderapi.model.managers;
 
 import com.example.becoderapi.model.data.Account;
@@ -32,3 +33,4 @@ public class AccountManager {
 
 
 }
+*/

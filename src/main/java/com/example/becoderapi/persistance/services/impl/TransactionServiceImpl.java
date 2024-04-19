@@ -4,20 +4,16 @@ import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.data.Transaction;
 import com.example.becoderapi.model.data.Type;
 import com.example.becoderapi.model.dto.Request;
-import com.example.becoderapi.model.dto.Response;
 import com.example.becoderapi.model.dto.TransactionResponse;
 import com.example.becoderapi.model.exceptions.NegativeCostException;
 import com.example.becoderapi.model.exceptions.NoSuchAccountException;
 import com.example.becoderapi.model.exceptions.NotEnoughMoneyException;
 import com.example.becoderapi.model.exceptions.TransactionRuntimeException;
-import com.example.becoderapi.model.managers.AccountManager;
 import com.example.becoderapi.persistance.services.TransactionService;
 import com.example.becoderapi.persistance.services.repository.AccountRepository;
 import com.example.becoderapi.persistance.services.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor

@@ -1,16 +1,24 @@
-package com.example.becoderapi.model;
+package com.example.becoderapi.model.data;
 
 import com.example.becoderapi.model.utils.IdGenerator;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Data
-@Component
+@Entity
+@Table
 public class Account {
 
+    @Id
+    @Column
     private String id;
+    @Column
     private double balance;
 
     public Account() {

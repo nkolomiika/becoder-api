@@ -1,6 +1,6 @@
 package com.example.becoderapi.model.managers;
 
-import com.example.becoderapi.model.Account;
+import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.exceptions.NoSuchAccountException;
 import org.springframework.stereotype.Component;
 

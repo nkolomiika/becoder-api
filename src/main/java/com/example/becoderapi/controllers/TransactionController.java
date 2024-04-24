@@ -1,6 +1,7 @@
 package com.example.becoderapi.controllers;
 
 import com.example.becoderapi.model.dto.Request;
+import com.example.becoderapi.model.dto.TransactionRequest;
 import com.example.becoderapi.model.dto.TransactionResponse;
 import com.example.becoderapi.persistance.services.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping("/contract")
-    public ResponseEntity<TransactionResponse> contract(@RequestBody Request request) {
+    public ResponseEntity<TransactionResponse> contract(@RequestBody TransactionRequest request) {
         return ResponseEntity.ok(transactionService.makeContract(request));
     }
 

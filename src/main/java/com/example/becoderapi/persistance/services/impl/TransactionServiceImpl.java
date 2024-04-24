@@ -3,6 +3,7 @@ package com.example.becoderapi.persistance.services.impl;
 import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.data.Transaction;
 import com.example.becoderapi.model.dto.Request;
+import com.example.becoderapi.model.dto.TransactionRequest;
 import com.example.becoderapi.model.dto.TransactionResponse;
 import com.example.becoderapi.model.exceptions.NegativeCostException;
 import com.example.becoderapi.model.exceptions.NoSuchAccountException;
@@ -22,11 +23,11 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionRepository transactionRepository;
 
     @Override
-    public TransactionResponse makeContract(Request request) throws TransactionRuntimeException {
+    public TransactionResponse makeContract(TransactionRequest request) throws TransactionRuntimeException {
         return new TransactionResponse("Success transaction!", contract(request));
     }
 
-    private Transaction contract(Request request)
+    private Transaction contract(TransactionRequest request)
             throws NoSuchAccountException, NegativeCostException, NotEnoughMoneyException {
 
         Account buyer = accountRepository.getAccountById(request.buyerId())

@@ -2,7 +2,6 @@ package com.example.becoderapi.persistance.services.impl;
 
 import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.data.Transaction;
-import com.example.becoderapi.model.data.Type;
 import com.example.becoderapi.model.dto.Request;
 import com.example.becoderapi.model.dto.TransactionResponse;
 import com.example.becoderapi.model.exceptions.NegativeCostException;
@@ -24,36 +23,33 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionResponse makeContract(Request request) throws TransactionRuntimeException {
-        Transaction transaction = request.type() == Type.BUY ? buy(request) : sell(request);
-        return new TransactionResponse("Success transaction!", transaction);
+        return new TransactionResponse("Success transaction!", contract(request));
     }
 
-    private Transaction buy(Request request) throws NoSuchAccountException, NegativeCostException {
-        Account admin = accountRepository.getAccountById(request.id())
+    private Transaction contract(Request request)
+            throws NoSuchAccountException, NegativeCostException, NotEnoughMoneyException {
+
+        Account buyer = accountRepository.getAccountById(request.buyerId())
                 .orElseThrow(() -> {
                     throw new NoSuchAccountException();
                 });
 
-        var aBalance = admin.getBalance();
-
-        if (request.cost() < 0) throw new NegativeCostException();
-
-        admin.setBalance(aBalance + request.cost());
-        return transactionRepository.save(new Transaction(request.id(), request.type(), request.cost()));
-    }
-
-    private Transaction sell(Request request)
-            throws NoSuchAccountException, NotEnoughMoneyException, NegativeCostException {
-        var admin = accountRepository.getAccountById(request.id())
+        Account seller = accountRepository.getAccountById(request.sellerId())
                 .orElseThrow(() -> {
                     throw new NoSuchAccountException();
                 });
-        var aBalance = admin.getBalance();
 
-        if (request.cost() < 0) throw new NegativeCostException();
-        if (aBalance - request.cost() < 0) throw new NotEnoughMoneyException();
+        double buyerBalance = buyer.getBalance();
+        double sellerBalance = seller.getBalance();
+        double contractSum = request.sum();
 
-        admin.setBalance(aBalance - request.cost());
-        return transactionRepository.save(new Transaction(request.id(), request.type(), request.cost()));
+        if (contractSum < 0) throw new NegativeCostException();
+        if (buyerBalance - contractSum < 0) throw new NotEnoughMoneyException();
+
+        buyer.setBalance(buyerBalance - request.sum());
+        seller.setBalance(sellerBalance + request.sum());
+        return transactionRepository.save(new Transaction(
+                request.buyerId(), request.sellerId(), request.sum()
+        ));
     }
 }

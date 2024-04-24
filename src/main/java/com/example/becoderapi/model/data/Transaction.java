@@ -21,9 +21,9 @@ public class Transaction {
     @Column
     private String idTransaction;
     @Column
-    private String idHolder;
+    private String buyerId;
     @Column
-    private Type type;
+    private String sellerId;
     @Column
     private double cost;
     @Column
@@ -32,10 +32,10 @@ public class Transaction {
     //todo придумать как подвязать завершенность сделки в параметр
     //private final boolean isComplete;
 
-    public Transaction(String id, Type type, double cost) {
+    public Transaction(String buyerId, String sellerId, double cost) {
         this.idTransaction = IdGenerator.generate();
-        this.idHolder = id;
-        this.type = type;
+        this.buyerId = buyerId;
+        this.sellerId = sellerId;
         this.cost = cost;
         this.timeInit = Time.valueOf(LocalTime.now());
     }

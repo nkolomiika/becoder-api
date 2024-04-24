@@ -27,7 +27,7 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getInfoById(request));
     }
 
-    @GetMapping("/create")
+    @GetMapping("/createAccount")
     public ResponseEntity<Response> createAccount() {
         return ResponseEntity.ok(accountService.createAccount());
     }

@@ -2,7 +2,6 @@ package com.example.becoderapi.persistance.services.impl;
 
 import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.data.Transaction;
-import com.example.becoderapi.model.dto.Request;
 import com.example.becoderapi.model.dto.TransactionRequest;
 import com.example.becoderapi.model.dto.TransactionResponse;
 import com.example.becoderapi.model.exceptions.NegativeCostException;
@@ -14,6 +13,7 @@ import com.example.becoderapi.persistance.services.repository.AccountRepository;
 import com.example.becoderapi.persistance.services.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +23,7 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionRepository transactionRepository;
 
     @Override
+    @Transactional(rollbackFor = {TransactionRuntimeException.class})
     public TransactionResponse makeContract(TransactionRequest request) throws TransactionRuntimeException {
         return new TransactionResponse("Success transaction!", contract(request));
     }
@@ -47,10 +48,10 @@ public class TransactionServiceImpl implements TransactionService {
         if (contractSum < 0) throw new NegativeCostException();
         if (buyerBalance - contractSum < 0) throw new NotEnoughMoneyException();
 
-        buyer.setBalance(buyerBalance - request.sum());
-        seller.setBalance(sellerBalance + request.sum());
+        buyer.setBalance(buyerBalance - contractSum);
+        seller.setBalance(sellerBalance + contractSum);
         return transactionRepository.save(new Transaction(
-                request.buyerId(), request.sellerId(), request.sum()
+                request.buyerId(), request.sellerId(), contractSum
         ));
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GeneralExceptionController {
 
-    @ExceptionHandler(value = {TransactionRuntimeException.class})
+    @ExceptionHandler(value = {TransactionRuntimeException.class, RuntimeException.class})
     public ResponseEntity<Response> handleTransactionRuntimeException(RuntimeException exception) {
         return ResponseEntity.badRequest().body(
                 new Response(

@@ -9,7 +9,7 @@ export function AccountView({account} : AccountProps) {
     }
 
     return (
-        <div className="h-[200px] w-full bg-black rounded-xl text-xs shadow-[4px_4px_orange]
+        <div className="h-[200px] w-full bg-black rounded-xl text-xs
          content-center flex flex-col justify-between font-mono text-gray-600 overflow-hidden">
             <p className="text-right py-2 px-4">Your ID: {account.id}</p>
             <div className="relative cursor-pointer text-center w-[60%] mx-auto mb-6" onClick={changeBalanceView}>
@@ -17,7 +17,7 @@ export function AccountView({account} : AccountProps) {
                 transition-all ease text-xl flex items-center ${isHidden? 'opacity-1' : 'opacity-0'}`}>
                     Show balance
                 </div>
-                <p className="text-3xl text-white">{account.balance} $</p>
+                <p className="text-3xl text-white">${account.balance}</p>
             </div>
         </div>
     )

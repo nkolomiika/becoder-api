@@ -1,5 +1,7 @@
-FROM openjdk:19
-EXPOSE 8080
-ARG JAR_FILE=target/becoder-api-0.0.1-SNAPSHOT.jar
-ADD ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM maven:3.8.5-openjdk-17
+
+WORKDIR /
+COPY . .
+RUN mvn clean install
+
+CMD mvn spring-boot:run

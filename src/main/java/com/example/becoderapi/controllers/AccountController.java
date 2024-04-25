@@ -29,4 +29,9 @@ public class AccountController {
     public ResponseEntity<Response> createAccount(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(accountService.createAccount(request));
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Response> login(@RequestBody AuthRequest request) {
+        return ResponseEntity.ok(accountService.login(request));
+    }
 }

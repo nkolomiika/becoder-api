@@ -6,7 +6,6 @@ import com.example.becoderapi.model.dto.TransactionResponse;
 
 public interface TransactionService {
     TransactionResponse makeContract(TransactionRequest request);
-
     Response updateBalance(TransactionRequest request);
 
 }

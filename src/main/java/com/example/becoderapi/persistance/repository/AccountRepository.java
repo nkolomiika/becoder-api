@@ -1,4 +1,4 @@
-package com.example.becoderapi.persistance.services.repository;
+package com.example.becoderapi.persistance.repository;
 
 import com.example.becoderapi.model.data.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,9 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    Optional<Account> getAccountById(String id);
+    Optional<Account> findAccountById(String id);
 
-    List<Account> getAllAccount();
-
-    Optional<Account> getAccountByLogin(String login);
+    Optional<Account> findAccountByLogin(String login);
 }

@@ -1,4 +1,4 @@
-package com.example.becoderapi.model.utils;
+package com.example.becoderapi.utils;
 
 import org.springframework.stereotype.Component;
 

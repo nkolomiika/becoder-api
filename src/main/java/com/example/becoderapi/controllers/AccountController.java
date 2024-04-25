@@ -20,7 +20,7 @@ public class AccountController {
         return ResponseEntity.ok(accountService.info());
     }
 
-    @GetMapping("/infoID")
+    @GetMapping("/info-id")
     public ResponseEntity<Response> info(@RequestBody Request request) {
         return ResponseEntity.ok(accountService.getInfoById(request));
     }

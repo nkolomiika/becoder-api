@@ -1,6 +1,6 @@
 package com.example.becoderapi.model.data;
 
-import com.example.becoderapi.model.utils.IdGenerator;
+import com.example.becoderapi.utils.IdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

@@ -7,11 +7,11 @@ import com.example.becoderapi.model.dto.TransactionRequest;
 import com.example.becoderapi.model.dto.TransactionResponse;
 import com.example.becoderapi.model.exceptions.abstracts.TransactionRuntimeException;
 import com.example.becoderapi.model.exceptions.transactions.NegativeCostException;
-import com.example.becoderapi.model.exceptions.transactions.NoSuchAccountException;
+import com.example.becoderapi.model.exceptions.auth.NoSuchAccountException;
 import com.example.becoderapi.model.exceptions.transactions.NotEnoughMoneyException;
 import com.example.becoderapi.persistance.services.TransactionService;
-import com.example.becoderapi.persistance.services.repository.AccountRepository;
-import com.example.becoderapi.persistance.services.repository.TransactionRepository;
+import com.example.becoderapi.persistance.repository.AccountRepository;
+import com.example.becoderapi.persistance.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +32,12 @@ public class TransactionServiceImpl implements TransactionService {
     private Transaction contract(TransactionRequest request)
             throws NoSuchAccountException, NegativeCostException, NotEnoughMoneyException {
 
-        Account buyer = accountRepository.getAccountById(request.buyerId())
+        Account buyer = accountRepository.findAccountById(request.buyerId())
                 .orElseThrow(() -> {
                     throw new NoSuchAccountException();
                 });
 
-        Account seller = accountRepository.getAccountById(request.sellerId())
+        Account seller = accountRepository.findAccountById(request.sellerId())
                 .orElseThrow(() -> {
                     throw new NoSuchAccountException();
                 });
@@ -59,7 +59,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional(rollbackFor = {TransactionRuntimeException.class})
     public Response updateBalance(TransactionRequest request) throws TransactionRuntimeException {
-        Account account = accountRepository.getAccountById(request.sellerId()).orElseThrow(
+        Account account = accountRepository.findAccountById(request.sellerId()).orElseThrow(
                 () -> {
                     throw new NoSuchAccountException();
                 }

@@ -4,12 +4,11 @@ import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.dto.AuthRequest;
 import com.example.becoderapi.model.dto.Request;
 import com.example.becoderapi.model.dto.Response;
-import com.example.becoderapi.model.dto.TransactionRequest;
 import com.example.becoderapi.model.exceptions.auth.UserAlreadyExistsException;
-import com.example.becoderapi.model.exceptions.transactions.NegativeCostException;
-import com.example.becoderapi.model.exceptions.transactions.NoSuchAccountException;
+import com.example.becoderapi.model.exceptions.auth.NoSuchAccountException;
 import com.example.becoderapi.persistance.services.AccountService;
-import com.example.becoderapi.persistance.services.repository.AccountRepository;
+import com.example.becoderapi.persistance.repository.AccountRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +16,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-    private final AccountRepository accountRepository;
+    private AccountRepository accountRepository;
 
     @Override
     public Response getInfoById(Request request) throws NoSuchAccountException {
         return new Response(
-                accountRepository.getAccountById(request.id())
+                accountRepository.findAccountById(request.id())
                         .orElseThrow(() -> {
                             throw new NoSuchAccountException();
                         })
@@ -33,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Response info() {
         return new Response(
-                accountRepository.getAllAccount()
+                accountRepository.findAll()
                         .stream()
                         .map(acc -> acc.toString() + "\n")
                         .toString()
@@ -43,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Response createAccount(AuthRequest request) throws UserAlreadyExistsException {
 
-        if (accountRepository.getAccountByLogin(request.login()).isPresent())
+        if (accountRepository.findAccountByLogin(request.login()).isPresent())
             throw new UserAlreadyExistsException();
 
         return new Response(

@@ -1,14 +1,12 @@
 package com.example.becoderapi.model.data;
 
-import com.example.becoderapi.model.utils.IdGenerator;
+import com.example.becoderapi.utils.IdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.CustomLog;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Data
@@ -36,6 +34,10 @@ public class Account {
         this.login = login;
         this.password = password;
         this.balance = 0;
+    }
+
+    public Account() {
+
     }
 
     public String toString() {

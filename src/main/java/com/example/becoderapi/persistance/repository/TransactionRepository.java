@@ -1,4 +1,4 @@
-package com.example.becoderapi.persistance.services.repository;
+package com.example.becoderapi.persistance.repository;
 
 import com.example.becoderapi.model.data.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    Optional<Transaction> getTransactionByIdTransaction(String id);
+    Optional<Transaction> findTransactionByIdTransaction(String id);
     @Modifying
     @Query("UPDATE Account a SET a.balance = a.balance + :sum WHERE a.id = :id")
     void updateBalance(@Param("id") String id, @Param("sum") double sum);

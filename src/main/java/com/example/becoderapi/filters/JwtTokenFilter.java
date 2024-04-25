@@ -6,8 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,24 +29,24 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
-
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!header.startsWith(TOKEN_PREFIX)) {
+        if (header == null || !header.startsWith(TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         final String token = header.split(" ")[1].trim();
-        if (!jwtTokenUtil.validate(token)) {
+        UserDetails userDetails;
+        try {
+            userDetails = (UserDetails) accountRepository
+                    .findAccountById(jwtTokenUtil.getId(token))
+                    .orElse(null);
+        } catch (Exception e) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        UserDetails userDetails = (UserDetails) accountRepository
-                .findAccountById(jwtTokenUtil.getId(token))
-                .orElse(null);
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(

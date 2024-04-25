@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
     private final JwtTokenUtil jwtTokenUtil;
     private final BCryptPasswordEncoder bCrypt;
 
@@ -26,9 +26,7 @@ public class AccountServiceImpl implements AccountService {
     public Response getInfoById(Request request) throws NoSuchAccountException {
         return new Response(
                 accountRepository.findAccountById(request.id())
-                        .orElseThrow(() -> {
-                            throw new NoSuchAccountException();
-                        })
+                        .orElseThrow(NoSuchAccountException::new)
                         .toString()
         );
     }
@@ -39,6 +37,7 @@ public class AccountServiceImpl implements AccountService {
                 accountRepository.findAll()
                         .stream()
                         .map(acc -> acc.toString() + "\n")
+                        .toList()
                         .toString()
         );
     }
@@ -49,10 +48,7 @@ public class AccountServiceImpl implements AccountService {
         if (accountRepository.findAccountByLogin(request.login()).isPresent())
             throw new UserAlreadyExistsException();
 
-        Account account = Account.builder()
-                .login(request.login())
-                .password(request.password())
-                .build();
+        Account account = new Account(request.login(), bCrypt.encode(request.password()));
 
         String token = jwtTokenUtil.createToken(account);
         accountRepository.save(account);
@@ -63,7 +59,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account checkLoginAndPassword(AuthRequest request) throws NoSuchAccountException {
         Account account = accountRepository.findAccountByLogin(request.login())
-                .orElseThrow(() -> {throw new NoSuchAccountException();});
+                .orElseThrow(NoSuchAccountException::new);
         if (bCrypt.matches(request.password(), account.getPassword())) {
             return account;
         }

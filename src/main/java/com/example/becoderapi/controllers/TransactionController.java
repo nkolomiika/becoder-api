@@ -1,10 +1,11 @@
 package com.example.becoderapi.controllers;
 
-import com.example.becoderapi.model.dto.Request;
 import com.example.becoderapi.model.dto.Response;
 import com.example.becoderapi.model.dto.TransactionRequest;
 import com.example.becoderapi.model.dto.TransactionResponse;
 import com.example.becoderapi.persistance.services.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,16 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/transactions")
+@Tag(name = "Изменение баланса и заключение контрактов")
 public class TransactionController {
 
     private final TransactionService transactionService;
 
+    @Operation(summary = "Заключить контракт")
     @PostMapping("/contract")
     public ResponseEntity<TransactionResponse> contract(@RequestBody TransactionRequest request) {
         return ResponseEntity.ok(transactionService.makeContract(request));
     }
 
+    @Operation(summary = "Обновить баланс")
     @PostMapping("/update-balance")
     public ResponseEntity<Response> updateBalance(@RequestBody TransactionRequest request) {
         return ResponseEntity.ok(transactionService.updateBalance(request));

@@ -1,4 +1,4 @@
-package com.example.becoderapi.model.exceptions;
+package com.example.becoderapi.model.exceptions.abstracts;
 
 public class TransactionRuntimeException extends RuntimeException {
     @Override

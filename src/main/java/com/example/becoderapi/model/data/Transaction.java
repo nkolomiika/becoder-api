@@ -7,9 +7,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Time;
-import java.time.LocalTime;
 
 @Getter
 @Entity
@@ -27,17 +27,14 @@ public class Transaction {
     @Column
     private double cost;
     @Column
+    @CreationTimestamp
     private Time timeInit;
-
-    //todo придумать как подвязать завершенность сделки в параметр
-    //private final boolean isComplete;
 
     public Transaction(String buyerId, String sellerId, double cost) {
         this.idTransaction = IdGenerator.generate();
         this.buyerId = buyerId;
         this.sellerId = sellerId;
         this.cost = cost;
-        this.timeInit = Time.valueOf(LocalTime.now());
     }
 
     public String toJSON() {

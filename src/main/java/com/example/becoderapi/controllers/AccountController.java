@@ -1,18 +1,16 @@
 package com.example.becoderapi.controllers;
 
+import com.example.becoderapi.model.dto.AuthRequest;
 import com.example.becoderapi.model.dto.Request;
 import com.example.becoderapi.model.dto.Response;
 import com.example.becoderapi.persistance.services.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class AccountController {
 
     private final AccountService accountService;
@@ -27,8 +25,8 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getInfoById(request));
     }
 
-    @GetMapping("/createAccount")
-    public ResponseEntity<Response> createAccount() {
-        return ResponseEntity.ok(accountService.createAccount());
+    @PostMapping("/register")
+    public ResponseEntity<Response> createAccount(@RequestBody AuthRequest request) {
+        return ResponseEntity.ok(accountService.createAccount(request));
     }
 }

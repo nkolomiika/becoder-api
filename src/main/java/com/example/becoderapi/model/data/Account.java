@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.CustomLog;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +17,25 @@ import org.springframework.stereotype.Component;
 public class Account {
 
     @Id
-    @Column
+    @Column(nullable = false)
     private String id;
-    @Column
+    @Column(nullable = false, unique = true)
+    private String login;
+    @Column(nullable = false)
+    private String password;
+    @Column(nullable = false)
     private double balance;
 
-    public Account() {
+    /*public Account() {
         this.id = IdGenerator.generate();
-        this.balance = 100;
+        this.balance = 0;
+    }*/
+
+    public Account(String login, String password) {
+        this.id = IdGenerator.generate();
+        this.login = login;
+        this.password = password;
+        this.balance = 0;
     }
 
     public String toString() {

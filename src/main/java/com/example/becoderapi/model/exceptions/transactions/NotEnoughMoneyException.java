@@ -1,4 +1,6 @@
-package com.example.becoderapi.model.exceptions;
+package com.example.becoderapi.model.exceptions.transactions;
+
+import com.example.becoderapi.model.exceptions.abstracts.TransactionRuntimeException;
 
 public class NotEnoughMoneyException extends TransactionRuntimeException {
     @Override

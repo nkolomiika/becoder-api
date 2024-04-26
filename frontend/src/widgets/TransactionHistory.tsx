@@ -10,11 +10,11 @@ export function TransactionHistory() {
     const [transactions, setTransactions] = useState<ITransaction[]>([])
 
     useEffect(() => {
-        axios.get('http://localhost:6868/api/transactions/id-transactions', {
+        axios.get('http://localhost:6868/api/home/id-transactions', {
             headers: {
                 Authorization: "Bearer " + sessionStorage.getItem("token")
             }
-        }).then(resp => setTransactions(resp.data))
+        }).then(resp => {setTransactions(resp.data); console.log(resp)})
     }, []);
 
     function replaceContent() {

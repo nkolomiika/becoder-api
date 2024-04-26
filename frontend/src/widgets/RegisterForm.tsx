@@ -23,7 +23,7 @@ export function RegisterForm() {
         axios.post('http://localhost:6868/api/auth/register', {
             login: responseBody.username,
             password: responseBody.password
-        }).then(res => {sessionStorage.setItem("token", res.data); console.log(res.data); navigate('/')})
+        }).then(res => {sessionStorage.setItem("token", res.data.token); console.log(res.data.token); navigate('/')})
             .catch(err => alert(err))
     }
     return (

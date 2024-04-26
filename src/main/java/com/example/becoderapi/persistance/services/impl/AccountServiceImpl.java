@@ -1,5 +1,6 @@
 package com.example.becoderapi.persistance.services.impl;
 
+import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.dto.basic.Request;
 import com.example.becoderapi.model.dto.basic.Response;
 import com.example.becoderapi.model.exceptions.auth.NoSuchAccountException;
@@ -17,12 +18,9 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Response getInfoById(Request request) throws NoSuchAccountException {
-        return new Response(
-                accountRepository.findAccountById(request.id())
-                        .orElseThrow(NoSuchAccountException::new)
-                        .toString()
-        );
+    public Account getInfoById(Request request) throws NoSuchAccountException {
+        return accountRepository.findAccountById(request.id())
+                        .orElseThrow(NoSuchAccountException::new);
     }
 
     @Override

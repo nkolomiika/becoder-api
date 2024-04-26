@@ -1,16 +1,19 @@
 package com.example.becoderapi.controllers;
 
 
+import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.dto.auth.AuthRequest;
 import com.example.becoderapi.model.dto.auth.AuthResponse;
+import com.example.becoderapi.model.dto.basic.Request;
+import com.example.becoderapi.model.dto.basic.Response;
+import com.example.becoderapi.persistance.services.AccountService;
 import com.example.becoderapi.persistance.services.AuthenticService;
+import com.example.becoderapi.utils.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticController {
 
     private final AuthenticService authenticService;
+    private final AccountService accountService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Operation(summary = "Зарегистрироваться")
     @PostMapping("/register")
@@ -25,11 +30,19 @@ public class AuthenticController {
         return ResponseEntity.ok(authenticService.register(request));
     }
 
+    @GetMapping("/check")
+    public ResponseEntity<Account> check(@RequestHeader("Authorization") String auth) {
+        if (!auth.isBlank()) {
+            String id = jwtTokenUtil.getId(auth.split(" ")[1]);
+            if (id == null) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return ResponseEntity.ok(accountService.getInfoById(new Request(id)));
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
     @Operation(summary = "Войти в аккаунт")
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(authenticService.login(request));
     }
-
-
 }

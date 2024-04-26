@@ -42,8 +42,7 @@ public class Account {
 
     }
 
-    /*public String toString() {
-        return String.format("id : %s\nbalance : %s", this.getId(), this.getBalance());
+    public String toString() {
+        return String.format("{id : %s, balance : %s}", this.getId(), this.getBalance());
     }
-*/
 }

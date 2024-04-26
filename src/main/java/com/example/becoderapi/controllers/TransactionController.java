@@ -1,5 +1,6 @@
 package com.example.becoderapi.controllers;
 
+import com.example.becoderapi.model.data.Transaction;
 import com.example.becoderapi.model.dto.basic.Response;
 import com.example.becoderapi.model.dto.transaction.TransactionRequest;
 import com.example.becoderapi.model.dto.transaction.TransactionResponse;
@@ -8,10 +9,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +31,11 @@ public class TransactionController {
     @PostMapping("/update-balance")
     public ResponseEntity<Response> updateBalance(@RequestBody TransactionRequest request) {
         return ResponseEntity.ok(transactionService.updateBalance(request));
+    }
+
+    @GetMapping("/id-transactions")
+    public ResponseEntity<List<Transaction>> getIdTransactions(@RequestParam String id) {
+        return ResponseEntity.ok(transactionService.getTransactions(id));
     }
 
 }

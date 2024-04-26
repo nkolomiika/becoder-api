@@ -15,7 +15,7 @@ export const ModalContext = createContext<IModalContext>({
 })
 
 export function ModalWindowProvider({children}: {children : ReactNode}) {
-    const [isActive, setActive] = useState(true)
+    const [isActive, setActive] = useState(false)
     const [content, setContent] = useState<ReactNode>(<div></div>)
     function show() {
         setActive(true)
@@ -29,7 +29,7 @@ export function ModalWindowProvider({children}: {children : ReactNode}) {
         <ModalContext.Provider value={{state: isActive, show, hide, setContent}}>
             {children}
             {isActive && <div className="fixed top-0 left-0 w-full h-full">
-                <div className="bg-[rgba(0,_0,_0,_.5)] w-full h-full" onClick={() => setActive(false)}/>
+                <div className="bg-black/60 w-full h-full" onClick={() => setActive(false)}/>
                 <div className="fixed w-[80%] h-[80%] rounded-xl -translate-x-1/2 left-1/2 top-20 py-8 px-20 bg-white">
                     {content}
                 </div>

@@ -40,7 +40,8 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
             // auth endpoints
             "/api/auth/register",
-            "/api/auth/login"
+            "/api/auth/login",
+            "/api/auth/check"
     };
 
     @Bean
@@ -67,7 +68,7 @@ public class SecurityConfiguration {
         })).authorizeHttpRequests(
                 r -> {
                     r.requestMatchers("/api/auth/test").permitAll();
-                    r.requestMatchers("/api/auth/register", "/api/auth/login").permitAll();
+                    r.requestMatchers("/api/auth/register", "/api/auth/login", "api/auth/check").permitAll();
                     r.requestMatchers(AUTH_WHITELIST).permitAll();
                     r.requestMatchers("/**").authenticated();
                 });

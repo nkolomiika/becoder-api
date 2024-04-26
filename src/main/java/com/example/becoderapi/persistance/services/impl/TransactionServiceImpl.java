@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
@@ -33,14 +35,10 @@ public class TransactionServiceImpl implements TransactionService {
             throws NoSuchAccountException, NegativeCostException, NotEnoughMoneyException {
 
         Account buyer = accountRepository.findAccountById(request.buyerId())
-                .orElseThrow(() -> {
-                    throw new NoSuchAccountException();
-                });
+                .orElseThrow(NoSuchAccountException::new);
 
         Account seller = accountRepository.findAccountById(request.sellerId())
-                .orElseThrow(() -> {
-                    throw new NoSuchAccountException();
-                });
+                .orElseThrow(NoSuchAccountException::new);
 
         double buyerBalance = buyer.getBalance();
         double sellerBalance = seller.getBalance();
@@ -77,6 +75,11 @@ public class TransactionServiceImpl implements TransactionService {
         return new Response(
                 String.format("Balance successfully updated with %s", contractSum)
         );
+    }
+
+    @Override
+    public List<Transaction> getTransactions(String id) {
+        return transactionRepository.findIdTransactions(id);
     }
 
 }

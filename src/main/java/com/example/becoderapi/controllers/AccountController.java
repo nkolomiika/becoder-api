@@ -1,6 +1,7 @@
 package com.example.becoderapi.controllers;
 
 import com.example.becoderapi.model.data.Account;
+import com.example.becoderapi.model.dto.AccountResponse;
 import com.example.becoderapi.model.dto.basic.Request;
 import com.example.becoderapi.model.dto.basic.Response;
 import com.example.becoderapi.persistance.services.AccountService;
@@ -26,7 +27,7 @@ public class AccountController {
 
     @Operation(summary = "Получить информацию об аккаунте по айди")
     @PostMapping("/info-id")
-    public ResponseEntity<Account> info(@RequestBody Request request) {
+    public ResponseEntity<AccountResponse> info(@RequestBody Request request) {
         return ResponseEntity.ok(accountService.getInfoById(request));
     }
 

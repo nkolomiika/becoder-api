@@ -47,19 +47,17 @@ public class TransactionServiceImpl implements TransactionService {
         Account seller = accountRepository.findAccountById(request.sellerId())
                 .orElseThrow(NoSuchAccountException::new);
 
-        double buyerBalance = buyer.getBalance();
-        double sellerBalance = seller.getBalance();
+
         double contractSum = request.sum();
 
         if (contractSum < 0) throw new NegativeCostException();
-        if (buyerBalance - contractSum < 0) throw new NotEnoughMoneyException();
+        if (buyer.getBalance() - contractSum < 0) throw new NotEnoughMoneyException();
 
-        buyer.setBalance(buyerBalance - contractSum);
-        seller.setBalance(sellerBalance + contractSum);
+        buyer.setBalance(buyer.getBalance() - contractSum);
+        seller.setBalance(seller.getBalance() + contractSum);
 
-        transactionRepository.updateBalance(buyer.getId(), -1 * contractSum);
-        transactionRepository.updateBalance(seller.getId(), contractSum);
-
+        transactionRepository.updateBalance(buyer.getId(), buyer.getBalance());
+        transactionRepository.updateBalance(seller.getId(), seller.getBalance());
 
         return transactionRepository.save(new Transaction(
                 buyerId, request.sellerId(), contractSum

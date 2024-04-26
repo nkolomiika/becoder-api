@@ -20,8 +20,8 @@ export function RegisterForm() {
     const onSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         console.log(responseBody)
-        axios.post('http://localhost:8080/api/auth/register', {
-            username: responseBody.username,
+        axios.post('http://localhost:6868/api/auth/register', {
+            login: responseBody.username,
             password: responseBody.password
         }).then(res => {sessionStorage.setItem("token", res.data); console.log(res.data); navigate('/')})
             .catch(err => alert(err))
@@ -32,7 +32,9 @@ export function RegisterForm() {
             <Input title='Username' name="username" onChange={inputChangeHandler}/>
             <Input title='Password' name="password" onChange={inputChangeHandler}/>
             <Input title='Repeat password' name="repeated_password" onChange={inputChangeHandler}/>
-            <p className="text-xl">Already have an account? <NavLink to="/Login" className="underline text-orange-500">Log in</NavLink></p>
+            <button className="bg-blue-400 rounded-xl text-white p-4 text-xl font-bold curson-pointer">Register</button>
+            <p className="text-xl">Already have an account? <NavLink to="/Login" className="underline text-orange-500">Log
+                in</NavLink></p>
         </form>
     )
 }

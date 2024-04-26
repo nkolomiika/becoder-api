@@ -32,12 +32,4 @@ public class AccountServiceImpl implements AccountService {
                         .map(ObjectMapper::toAccountDto)
                         .toList());
     }
-
-    @Override
-    public Response getAllTransactionsByAccountId(String id) {
-        return new Response(
-                transactionRepository.findBySellerIdOrAndBuyerId(id)
-                        .stream().toList()
-        );
-    }
 }

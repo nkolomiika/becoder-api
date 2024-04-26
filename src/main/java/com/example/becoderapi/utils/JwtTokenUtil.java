@@ -41,9 +41,6 @@ public class JwtTokenUtil {
         return claims.get("id", String.class);
     }
 
-    public boolean checkTokenValid(String token, String id) {
-        return id.equals(getId(token));
-    }
 
     public String extractTokenFromHeader(HttpServletRequest request) {
         final String h = request.getHeader(HttpHeaders.AUTHORIZATION);

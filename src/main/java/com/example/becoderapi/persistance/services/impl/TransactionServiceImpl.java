@@ -14,7 +14,6 @@ import com.example.becoderapi.persistance.repository.TransactionRepository;
 import com.example.becoderapi.persistance.services.TransactionService;
 import com.example.becoderapi.utils.JwtTokenUtil;
 import io.jsonwebtoken.JwtException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,8 +83,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> getTransactions(String id) {
-        return transactionRepository.findIdTransactions(id);
+    public List<Transaction> getTransactions(String token) {
+        String id = jwtTokenUtil.getId(token);
+        return transactionRepository.findIdTransactions(id).stream().toList();
     }
 
 }

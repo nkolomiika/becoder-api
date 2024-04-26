@@ -67,7 +67,7 @@ public class SecurityConfiguration {
             return corsConfiguration;
         })).authorizeHttpRequests(
                 r -> {
-                    r.requestMatchers("/api/auth/test").permitAll();
+                    // r.requestMatchers("/api/auth/test").permitAll();
                     r.requestMatchers("/api/auth/register", "/api/auth/login", "api/auth/check").permitAll();
                     r.requestMatchers(AUTH_WHITELIST).permitAll();
                     r.requestMatchers("/**").authenticated();
@@ -75,11 +75,7 @@ public class SecurityConfiguration {
 
         http.addFilterBefore(
                         jwtTokenFilter,
-                        UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(
-                        jwtTokenFilter,
-                        JwtTokenFilter.class
-                );
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

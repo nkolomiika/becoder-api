@@ -35,8 +35,8 @@ public class TransactionController {
     }
 
     @GetMapping("/id-transactions")
-    public ResponseEntity<List<Transaction>> getIdTransactions(@RequestParam String id) {
-        return ResponseEntity.ok(transactionService.getTransactions(id));
+    public ResponseEntity<List<Transaction>> getIdTransactions(@RequestHeader String token) {
+        return ResponseEntity.ok(transactionService.getTransactions(token));
     }
 
 }

@@ -3,12 +3,12 @@ import {ChangeEvent, FormEvent, useState} from "react";
 import axios from 'axios'
 
 interface FormValues {
-    seller_id: string,
-    cost: number
+    sellerId: string,
+    sum: number
 }
 
 export function TransactionForm() {
-    const [responseBody, setResponseBody] = useState<FormValues>({seller_id: "", cost: 0})
+    const [responseBody, setResponseBody] = useState<FormValues>({sellerId: "", sum: 0})
     const inputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
         setResponseBody({...responseBody, [name]: value})
@@ -16,8 +16,8 @@ export function TransactionForm() {
     const onSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         axios.post('http://localhost:6868/api/transactions/contract', {
-            seller_id: responseBody.seller_id,
-            cost: responseBody.cost
+            sellerId: responseBody.sellerId,
+            sum: responseBody.sum
         }, {
             headers : {
                 Authorization: 'Bearer ' + sessionStorage.getItem("token")
@@ -28,8 +28,8 @@ export function TransactionForm() {
     return (
         <form className="flex flex-col gap-4" onSubmit={onSubmitHandler}>
             <div>
-                <Input title="Account ID" placeholder="Where to send money" onChange={inputChangeHandler}/>
-                <Input title="Amount" placeholder="How much" onChange={inputChangeHandler}/>
+                <Input title="Account ID" name="sellerId" placeholder="Where to send money" onChange={inputChangeHandler}/>
+                <Input title="Amount" name="sum" placeholder="How much" onChange={inputChangeHandler}/>
             </div>
             <button className="bg-blue-400 p-4 text-xl rounded-xl text-white font-bold">Submit</button>
         </form>

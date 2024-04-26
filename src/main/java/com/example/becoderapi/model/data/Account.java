@@ -35,7 +35,7 @@ public class Account {
         this.id = IdGenerator.generate();
         this.login = login;
         this.password = password;
-        this.balance = 0;
+        this.balance = 10000;
     }
 
     public Account() {

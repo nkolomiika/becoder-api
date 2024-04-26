@@ -1,6 +1,7 @@
 export interface ITransaction {
-    from: string,
-    to: string,
+    idTransaction: string
+    sellerId: string,
+    buyerId: string,
     cost: number,
-    time: string
+    timeInit: string
 }

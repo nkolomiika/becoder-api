@@ -41,7 +41,6 @@ public class SecurityConfiguration {
             // auth endpoints
             "/api/auth/register",
             "/api/auth/login",
-            "/api/auth/check"
     };
 
     @Bean

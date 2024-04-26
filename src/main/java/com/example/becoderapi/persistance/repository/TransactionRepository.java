@@ -19,6 +19,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findIdTransactions(@Param("id") String id);
 
     @Modifying
-    @Query("UPDATE Account a SET a.balance = a.balance + :sum WHERE a.id = :id")
+    @Query("UPDATE Account a SET a.balance = :sum WHERE a.id = :id")
     void updateBalance(@Param("id") String id, @Param("sum") double sum);
 }

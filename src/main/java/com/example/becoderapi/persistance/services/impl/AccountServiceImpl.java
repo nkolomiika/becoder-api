@@ -7,6 +7,7 @@ import com.example.becoderapi.model.exceptions.auth.NoSuchAccountException;
 import com.example.becoderapi.persistance.repository.AccountRepository;
 import com.example.becoderapi.persistance.repository.TransactionRepository;
 import com.example.becoderapi.persistance.services.AccountService;
+import com.example.becoderapi.utils.JwtTokenUtil;
 import com.example.becoderapi.utils.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,12 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     public Account getInfoById(Request request) throws NoSuchAccountException {
         return accountRepository.findAccountById(request.id())
-                        .orElseThrow(NoSuchAccountException::new);
+                .orElseThrow(NoSuchAccountException::new);
     }
 
     @Override
@@ -31,5 +33,11 @@ public class AccountServiceImpl implements AccountService {
                         .stream()
                         .map(ObjectMapper::toAccountDto)
                         .toList());
+    }
+
+    @Override
+    public Response getTransactions(String token) {
+        String id = jwtTokenUtil.getId(token.split(" ")[1].trim());
+        return new Response(transactionRepository.findIdTransactions(id).stream().toList());
     }
 }

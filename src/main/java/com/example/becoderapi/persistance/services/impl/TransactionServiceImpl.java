@@ -82,10 +82,4 @@ public class TransactionServiceImpl implements TransactionService {
         );
     }
 
-    @Override
-    public List<Transaction> getTransactions(String token) {
-        String id = jwtTokenUtil.getId(token);
-        return transactionRepository.findIdTransactions(id).stream().toList();
-    }
-
 }

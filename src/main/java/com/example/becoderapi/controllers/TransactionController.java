@@ -35,10 +35,4 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.updateBalance(request));
     }
 
-    @GetMapping("/id-transactions")
-    public ResponseEntity<List<Transaction>> getIdTransactions(@RequestHeader("Authorization") String token) {
-        System.out.println(token);
-        return ResponseEntity.ok(transactionService.getTransactions(token));
-    }
-
 }

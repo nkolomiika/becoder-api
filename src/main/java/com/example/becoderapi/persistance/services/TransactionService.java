@@ -12,5 +12,4 @@ public interface TransactionService {
 
     Response updateBalance(TransactionRequest request);
 
-    List<Transaction> getTransactions(String id);
 }

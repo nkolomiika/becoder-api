@@ -67,7 +67,7 @@ public class SecurityConfiguration {
         })).authorizeHttpRequests(
                 r -> {
                     // r.requestMatchers("/api/auth/test").permitAll();
-                    r.requestMatchers("/api/transactions/update-balance").denyAll();
+                    // r.requestMatchers("/api/transactions/update-balance").denyAll();
                     r.requestMatchers("/api/auth/register", "/api/auth/login", "api/auth/check").permitAll();
                     r.requestMatchers(AUTH_WHITELIST).permitAll();
                     r.requestMatchers("/**").authenticated();

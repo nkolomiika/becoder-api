@@ -6,6 +6,5 @@ import com.example.becoderapi.model.dto.basic.Response;
 
 public interface AccountService {
     Response info();
-
     Account getInfoById(Request request);
 }

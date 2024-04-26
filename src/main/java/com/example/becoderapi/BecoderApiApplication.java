@@ -8,5 +8,4 @@ public class BecoderApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(BecoderApiApplication.class, args);
     }
-
 }

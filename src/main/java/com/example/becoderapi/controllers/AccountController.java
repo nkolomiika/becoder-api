@@ -4,6 +4,7 @@ import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.dto.basic.Request;
 import com.example.becoderapi.model.dto.basic.Response;
 import com.example.becoderapi.persistance.services.AccountService;
+import com.example.becoderapi.persistance.services.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     private final AccountService accountService;
+    private final TransactionService transactionService;
 
     @Operation(summary = "Получить информацию обо всех аккаунтов")
     @GetMapping("/info")
@@ -31,8 +33,8 @@ public class AccountController {
     }
 
     @Operation(summary = "Получить информацию по транзакциям пользователя")
-    @GetMapping("/transactions")
+    @GetMapping("/id-transactions")
     public ResponseEntity<Response> getTransactionsById(@RequestParam String id) {
-        return ResponseEntity.ok(accountService.getAllTransactionsByAccountId(id));
+        return ResponseEntity.ok(new Response(transactionService.getTransactions(id)));
     }
 }

@@ -7,7 +7,7 @@ import {FrameHeader} from "../features/FrameHeader.tsx";
 
 export function WalletView({account} : AccountProps) {
     return (
-        <FrameHeader className="flex flex-col gap-y-4 w-[350px]" title="My Wallet">
+        <FrameHeader className="flex flex-col justify-around w-[350px] p-4" title="My Wallet">
             <AccountView account={account}/>
             <div className="flex justify-between cursor-pointer">
                 <TransactionButton icon={donateArrow} title={'Send'} />

@@ -5,6 +5,6 @@ import com.example.becoderapi.model.dto.basic.Response;
 
 public interface AccountService {
     Response info();
-
     Response getInfoById(Request request);
+    Response getAllTransactionsByAccountId(String id);
 }

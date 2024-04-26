@@ -12,20 +12,26 @@ import com.example.becoderapi.model.exceptions.transactions.NotEnoughMoneyExcept
 import com.example.becoderapi.persistance.repository.AccountRepository;
 import com.example.becoderapi.persistance.repository.TransactionRepository;
 import com.example.becoderapi.persistance.services.TransactionService;
-import lombok.AllArgsConstructor;
+import com.example.becoderapi.utils.JwtTokenUtil;
+import io.jsonwebtoken.JwtException;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 
-    private AccountRepository accountRepository;
-    private TransactionRepository transactionRepository;
+    private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     @Transactional(rollbackFor = {TransactionRuntimeException.class})
-    public TransactionResponse makeContract(TransactionRequest request) throws TransactionRuntimeException {
+    public TransactionResponse makeContract(
+            TransactionRequest request) throws TransactionRuntimeException, JwtException {
+
         return new TransactionResponse("Success transaction!", contract(request));
     }
 

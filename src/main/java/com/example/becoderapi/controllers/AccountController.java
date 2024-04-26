@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/home")
 @Tag(name = "Авторизация")
 public class AccountController {
 
@@ -29,9 +29,9 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getInfoById(request));
     }
 
-    @PostMapping("/test")
-    public ResponseEntity<Response> test(@RequestBody Request request) {
-        return ResponseEntity.ok(new Response(request.toString()));
+    @Operation(summary = "Получить информацию по транзакциям пользователя")
+    @GetMapping("/transactions")
+    public ResponseEntity<Response> getTransactionsById(@RequestParam String id) {
+        return ResponseEntity.ok(accountService.getAllTransactionsByAccountId(id));
     }
-
 }

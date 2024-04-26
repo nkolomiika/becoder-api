@@ -3,9 +3,12 @@ package com.example.becoderapi.utils;
 import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.security.JwtConfiguration;
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -36,5 +39,14 @@ public class JwtTokenUtil {
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getId();
+    }
+
+    public boolean checkTokenValid(String token, String id) {
+        return id.equals(getId(token));
+    }
+
+    public String extractTokenFromHeader(HttpServletRequest request) {
+        final String h = request.getHeader(HttpHeaders.AUTHORIZATION);
+        return h.split(" ")[1].trim();
     }
 }

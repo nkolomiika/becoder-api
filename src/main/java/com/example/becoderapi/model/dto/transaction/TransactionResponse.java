@@ -1,4 +1,4 @@
-package com.example.becoderapi.model.dto;
+package com.example.becoderapi.model.dto.transaction;
 
 import com.example.becoderapi.model.data.Transaction;
 

@@ -42,8 +42,8 @@ public class Account {
 
     }
 
-    public String toString() {
+    /*public String toString() {
         return String.format("id : %s\nbalance : %s", this.getId(), this.getBalance());
     }
-
+*/
 }

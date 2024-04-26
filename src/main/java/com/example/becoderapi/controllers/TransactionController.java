@@ -1,8 +1,8 @@
 package com.example.becoderapi.controllers;
 
-import com.example.becoderapi.model.dto.Response;
-import com.example.becoderapi.model.dto.TransactionRequest;
-import com.example.becoderapi.model.dto.TransactionResponse;
+import com.example.becoderapi.model.dto.basic.Response;
+import com.example.becoderapi.model.dto.transaction.TransactionRequest;
+import com.example.becoderapi.model.dto.transaction.TransactionResponse;
 import com.example.becoderapi.persistance.services.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

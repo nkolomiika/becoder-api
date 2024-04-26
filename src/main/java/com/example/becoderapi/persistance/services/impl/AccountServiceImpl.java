@@ -1,16 +1,12 @@
 package com.example.becoderapi.persistance.services.impl;
 
-import com.example.becoderapi.model.data.Account;
-import com.example.becoderapi.model.dto.AuthRequest;
-import com.example.becoderapi.model.dto.Request;
-import com.example.becoderapi.model.dto.Response;
+import com.example.becoderapi.model.dto.basic.Request;
+import com.example.becoderapi.model.dto.basic.Response;
 import com.example.becoderapi.model.exceptions.auth.NoSuchAccountException;
-import com.example.becoderapi.model.exceptions.auth.UserAlreadyExistsException;
 import com.example.becoderapi.persistance.repository.AccountRepository;
 import com.example.becoderapi.persistance.services.AccountService;
-import com.example.becoderapi.utils.JwtTokenUtil;
+import com.example.becoderapi.utils.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,8 +14,6 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final JwtTokenUtil jwtTokenUtil;
-    private final BCryptPasswordEncoder bCrypt;
 
 
     @Override
@@ -36,40 +30,8 @@ public class AccountServiceImpl implements AccountService {
         return new Response(
                 accountRepository.findAll()
                         .stream()
-                        .map(acc -> acc.toString() + "\n")
-                        .toList()
-                        .toString()
-        );
+                        .map(ObjectMapper::toAccountDto)
+                        .toList());
     }
 
-    @Override
-    public Response createAccount(AuthRequest request) throws UserAlreadyExistsException {
-
-        if (accountRepository.findAccountByLogin(request.login()).isPresent())
-            throw new UserAlreadyExistsException();
-
-        Account account = new Account(request.login(), bCrypt.encode(request.password()));
-
-        String token = jwtTokenUtil.createToken(account);
-        accountRepository.save(account);
-
-        return new Response(token);
-    }
-
-    @Override
-    public Account checkLoginAndPassword(AuthRequest request) throws NoSuchAccountException {
-        Account account = accountRepository.findAccountByLogin(request.login())
-                .orElseThrow(NoSuchAccountException::new);
-        if (bCrypt.matches(request.password(), account.getPassword())) {
-            return account;
-        }
-        throw new NoSuchAccountException();
-    }
-
-    @Override
-    public Response login(AuthRequest request) throws NoSuchAccountException {
-        Account account = checkLoginAndPassword(request);
-        String token = jwtTokenUtil.createToken(account);
-        return new Response(token);
-    }
 }

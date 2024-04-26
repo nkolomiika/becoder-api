@@ -2,16 +2,16 @@ package com.example.becoderapi.persistance.services.impl;
 
 import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.data.Transaction;
-import com.example.becoderapi.model.dto.Response;
-import com.example.becoderapi.model.dto.TransactionRequest;
-import com.example.becoderapi.model.dto.TransactionResponse;
+import com.example.becoderapi.model.dto.basic.Response;
+import com.example.becoderapi.model.dto.transaction.TransactionRequest;
+import com.example.becoderapi.model.dto.transaction.TransactionResponse;
 import com.example.becoderapi.model.exceptions.abstracts.TransactionRuntimeException;
-import com.example.becoderapi.model.exceptions.transactions.NegativeCostException;
 import com.example.becoderapi.model.exceptions.auth.NoSuchAccountException;
+import com.example.becoderapi.model.exceptions.transactions.NegativeCostException;
 import com.example.becoderapi.model.exceptions.transactions.NotEnoughMoneyException;
-import com.example.becoderapi.persistance.services.TransactionService;
 import com.example.becoderapi.persistance.repository.AccountRepository;
 import com.example.becoderapi.persistance.repository.TransactionRepository;
+import com.example.becoderapi.persistance.services.TransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +51,11 @@ public class TransactionServiceImpl implements TransactionService {
 
         buyer.setBalance(buyerBalance - contractSum);
         seller.setBalance(sellerBalance + contractSum);
+
+        transactionRepository.updateBalance(buyer.getId(), -1 * contractSum);
+        transactionRepository.updateBalance(seller.getId(), contractSum);
+
+
         return transactionRepository.save(new Transaction(
                 request.buyerId(), request.sellerId(), contractSum
         ));
@@ -62,11 +67,11 @@ public class TransactionServiceImpl implements TransactionService {
         Account account = accountRepository.findAccountById(request.sellerId()).orElseThrow(
                 () -> {
                     throw new NoSuchAccountException();
-                }
-        );
+                });
 
         double contractSum = request.sum();
         if (contractSum < 0) throw new NegativeCostException();
+
         transactionRepository.updateBalance(account.getId(), contractSum);
 
         return new Response(

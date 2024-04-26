@@ -44,7 +44,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String token = header.split(" ")[1].trim();
+        final String token = jwtTokenUtil.extractTokenFromJwt(header);
         UserDetails userDetails;
         try {
             Account tmp = accountRepository

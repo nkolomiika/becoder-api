@@ -8,7 +8,7 @@ import com.example.becoderapi.model.dto.transaction.TransactionResponse;
 import java.util.List;
 
 public interface TransactionService {
-    TransactionResponse makeContract(TransactionRequest request);
+    TransactionResponse makeContract(String jwt, TransactionRequest request);
 
     Response updateBalance(TransactionRequest request);
 

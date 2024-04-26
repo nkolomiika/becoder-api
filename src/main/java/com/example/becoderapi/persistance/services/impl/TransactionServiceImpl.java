@@ -18,8 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
@@ -31,15 +29,19 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional(rollbackFor = {TransactionRuntimeException.class})
     public TransactionResponse makeContract(
+            String jwt,
             TransactionRequest request) throws TransactionRuntimeException, JwtException {
 
-        return new TransactionResponse("Success transaction!", contract(request));
+        return new TransactionResponse("Success transaction!", contract(jwt, request));
     }
 
-    private Transaction contract(TransactionRequest request)
+    private Transaction contract(String jwt, TransactionRequest request)
             throws NoSuchAccountException, NegativeCostException, NotEnoughMoneyException {
 
-        Account buyer = accountRepository.findAccountById(request.buyerId())
+        String token = jwtTokenUtil.extractTokenFromJwt(jwt);
+        String buyerId = jwtTokenUtil.getId(token);
+
+        Account buyer = accountRepository.findAccountById(buyerId)
                 .orElseThrow(NoSuchAccountException::new);
 
         Account seller = accountRepository.findAccountById(request.sellerId())
@@ -60,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
         return transactionRepository.save(new Transaction(
-                request.buyerId(), request.sellerId(), contractSum
+                buyerId, request.sellerId(), contractSum
         ));
     }
 

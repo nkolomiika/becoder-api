@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,8 @@ public class TransactionController {
     }
 
     @GetMapping("/id-transactions")
-    public ResponseEntity<List<Transaction>> getIdTransactions(@RequestHeader String token) {
+    public ResponseEntity<List<Transaction>> getIdTransactions(@RequestHeader("Authorization") String token) {
+        System.out.println(token);
         return ResponseEntity.ok(transactionService.getTransactions(token));
     }
 

@@ -16,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -31,6 +32,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private static final String TOKEN_PREFIX = "Bearer";
     private final AccountRepository accountRepository;
     private final JwtTokenUtil jwtTokenUtil;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -45,9 +47,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         final String token = header.split(" ")[1].trim();
         UserDetails userDetails;
         try {
-            userDetails = (UserDetails) accountRepository
+            Account tmp = accountRepository
                     .findAccountById(jwtTokenUtil.getId(token))
                     .orElse(null);
+
+            userDetails = tmp == null ? null : userDetailsService.loadUserByUsername(tmp.getId());
         } catch (Exception e) {
             filterChain.doFilter(request, response);
             return;
@@ -67,7 +71,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    protected void doFilter(HttpServletRequest request,
+    /*protected void doFilter(HttpServletRequest request,
                             @NonNull HttpServletResponse response,
                             @NonNull FilterChain filterChain) throws ServletException, IOException {
         if (request.getMethod().equals("POST")) {
@@ -88,6 +92,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
 
-    }
+    }*/
 
 }

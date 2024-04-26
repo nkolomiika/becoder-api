@@ -14,11 +14,21 @@ public class GeneralExceptionController {
     @ExceptionHandler(
             value = {
                     TransactionRuntimeException.class, JwtException.class,
-                    AuthRuntimeException.class, IllegalStateException.class
+                    AuthRuntimeException.class
             })
     public ResponseEntity<Response> handleTransactionRuntimeException(RuntimeException exception) {
         return ResponseEntity.badRequest().body(
                 new Response(exception.getMessage())
+        );
+    }
+
+    @ExceptionHandler(
+            value = {
+                    Exception.class
+            })
+    public ResponseEntity<Response> testExceptionHandler(Exception exception) {
+        return ResponseEntity.badRequest().body(
+                new Response(exception.getStackTrace())
         );
     }
 

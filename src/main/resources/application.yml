@@ -25,3 +25,5 @@ jwt:
   exp: 10080
 server:
   port: 6868
+  error:
+    include-stacktrace: never

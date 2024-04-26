@@ -1,6 +1,7 @@
 package com.example.becoderapi.persistance.services.impl;
 
 import com.example.becoderapi.model.data.Account;
+import com.example.becoderapi.model.dto.AccountResponse;
 import com.example.becoderapi.model.dto.basic.Request;
 import com.example.becoderapi.model.dto.basic.Response;
 import com.example.becoderapi.model.exceptions.auth.NoSuchAccountException;
@@ -21,9 +22,10 @@ public class AccountServiceImpl implements AccountService {
     private final JwtTokenUtil jwtTokenUtil;
 
     @Override
-    public Account getInfoById(Request request) throws NoSuchAccountException {
-        return accountRepository.findAccountById(request.id())
+    public AccountResponse getInfoById(Request request) throws NoSuchAccountException {
+        Account account = accountRepository.findAccountById(request.id())
                 .orElseThrow(NoSuchAccountException::new);
+        return new AccountResponse(account.getId(), account.getBalance()) ;
     }
 
     @Override

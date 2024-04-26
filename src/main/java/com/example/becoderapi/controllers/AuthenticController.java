@@ -1,12 +1,10 @@
 package com.example.becoderapi.controllers;
 
 
-import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.dto.AccountResponse;
 import com.example.becoderapi.model.dto.auth.AuthRequest;
 import com.example.becoderapi.model.dto.auth.AuthResponse;
 import com.example.becoderapi.model.dto.basic.Request;
-import com.example.becoderapi.model.dto.basic.Response;
 import com.example.becoderapi.persistance.services.AccountService;
 import com.example.becoderapi.persistance.services.AuthenticService;
 import com.example.becoderapi.utils.JwtTokenUtil;
@@ -32,9 +30,9 @@ public class AuthenticController {
     }
 
     @GetMapping("/check")
-    public ResponseEntity<AccountResponse> check(@RequestHeader("Authorization") String auth) {
-        if (!auth.isBlank()) {
-            String id = jwtTokenUtil.getId(auth.split(" ")[1]);
+    public ResponseEntity<AccountResponse> check(@RequestHeader("Authorization") String jwt) {
+        if (!jwt.isBlank()) {
+            String id = jwtTokenUtil.getId(jwtTokenUtil.extractTokenFromJwt(jwt));
             if (id == null) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             return ResponseEntity.ok(accountService.getInfoById(new Request(id)));
         }

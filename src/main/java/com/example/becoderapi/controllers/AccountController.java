@@ -1,6 +1,5 @@
 package com.example.becoderapi.controllers;
 
-import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.model.dto.AccountResponse;
 import com.example.becoderapi.model.dto.basic.Request;
 import com.example.becoderapi.model.dto.basic.Response;

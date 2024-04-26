@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface TransactionService {
     TransactionResponse makeContract(TransactionRequest request);
+
     Response updateBalance(TransactionRequest request);
 
     List<Transaction> getTransactions(String id);

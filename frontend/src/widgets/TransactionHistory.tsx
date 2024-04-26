@@ -30,7 +30,7 @@ export function TransactionHistory() {
     }
 
     return (
-        <FrameHeader className="w-[400px] p-2" title="Last operations">
+        <FrameHeader className="w-[500px] p-2" title="Last operations">
             <div className="flex flex-col w-full gap-y-4 p-4">
                 {transactions.slice(0,3).map((trans, ind) => <TransactionBlock transaction={trans} key={ind}/>)}
                 <button className="bg-blue-400 rounded-xl text-white p-4 text-xl font-bold curson-pointer"

@@ -29,7 +29,7 @@ export function Welcome() {
 
     return (
          <ModalWindowProvider>
-             {balance.balance > 0 && <div className="flex p-6 gap-4">
+             {balance.balance > 0 && <div className="flex p-6 gap-4 justify-center">
                 <WalletView account={balance}/>
                 <TransactionHistory />
             </div>}

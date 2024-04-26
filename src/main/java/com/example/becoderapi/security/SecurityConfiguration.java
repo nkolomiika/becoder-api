@@ -74,9 +74,12 @@ public class SecurityConfiguration {
                 });
 
         http.addFilterBefore(
-                jwtTokenFilter,
-                UsernamePasswordAuthenticationFilter.class
-        );
+                        jwtTokenFilter,
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(
+                        jwtTokenFilter,
+                        JwtTokenFilter.class
+                );
 
         return http.build();
     }

@@ -1,15 +1,38 @@
 import {Input} from "../slices/Input.tsx";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
+import {ChangeEvent, FormEvent, useState} from "react";
+import axios from 'axios'
+
+interface FormValues {
+    username: string,
+    password: string,
+    repeated_password: string
+}
 
 export function RegisterForm() {
-    return (
-        <div className="flex flex-col gap-2 mt-28">
-            <h2 className="text-3xl text-center font-bold">Register</h2>
-            <Input title='Username'/>
-            <Input title='Password'/>
-            <Input title='Repeat password'/>
-            <p className="text-xl">Already have an account? <NavLink to="/Login" className="underline text-orange-500">Log in</NavLink></p>
+    const [responseBody, setResponseBody] = useState<FormValues>({username: "", password: "", repeated_password: ""})
+    const navigate = useNavigate()
 
-        </div>
+    const inputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target
+        setResponseBody({...responseBody, [name]: value})
+    }
+    const onSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        console.log(responseBody)
+        axios.post('http://localhost:8080/api/auth/register', {
+            username: responseBody.username,
+            password: responseBody.password
+        }).then(res => {sessionStorage.setItem("token", res.data); console.log(res.data); navigate('/')})
+            .catch(err => alert(err))
+    }
+    return (
+        <form className="flex flex-col gap-2 mt-28" onSubmit={onSubmitHandler}>
+            <h2 className="text-3xl text-center font-bold">Register</h2>
+            <Input title='Username' name="username" onChange={inputChangeHandler}/>
+            <Input title='Password' name="password" onChange={inputChangeHandler}/>
+            <Input title='Repeat password' name="repeated_password" onChange={inputChangeHandler}/>
+            <p className="text-xl">Already have an account? <NavLink to="/Login" className="underline text-orange-500">Log in</NavLink></p>
+        </form>
     )
 }

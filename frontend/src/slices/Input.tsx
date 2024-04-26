@@ -1,9 +1,17 @@
 import {FrameHeader} from "../features/FrameHeader.tsx";
+import {ChangeEventHandler} from "react";
 
-export function Input({title, placeholder = ''} : {title: string, placeholder?: string }) {
+interface InputProps {
+    title: string,
+    name?: string,
+    onChange?: ChangeEventHandler,
+    placeholder?: string
+}
+export function Input({title, name, onChange, placeholder = ''} : InputProps) {
     return (
         <FrameHeader title={title}>
-            <input className="rounded-xl h-14 w-full text-xl px-4 text-bold" type="text" placeholder={placeholder}/>
+            <input name={name} className="rounded-xl h-14 w-full text-xl px-4 text-bold" type="text"
+                   placeholder={placeholder} onChange={onChange}/>
         </FrameHeader>
     )
 }

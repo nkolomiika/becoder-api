@@ -42,8 +42,7 @@ public class JwtTokenUtil {
     }
 
 
-    public String extractTokenFromHeader(HttpServletRequest request) {
-        final String h = request.getHeader(HttpHeaders.AUTHORIZATION);
-        return h.split(" ")[1].trim();
+    public String extractTokenFromJwt(String jwt) {
+        return jwt.split(" ")[1].trim();
     }
 }

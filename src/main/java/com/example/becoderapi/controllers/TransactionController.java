@@ -25,8 +25,10 @@ public class TransactionController {
 
     @Operation(summary = "Заключить контракт")
     @PostMapping("/contract")
-    public ResponseEntity<TransactionResponse> contract(@RequestBody TransactionRequest request) {
-        return ResponseEntity.ok(transactionService.makeContract(request));
+    public ResponseEntity<TransactionResponse> contract(
+            @RequestHeader("Authorization") String jwt,
+            @RequestBody TransactionRequest request) {
+        return ResponseEntity.ok(transactionService.makeContract(jwt, request));
     }
 
     @Operation(summary = "Обновить баланс")

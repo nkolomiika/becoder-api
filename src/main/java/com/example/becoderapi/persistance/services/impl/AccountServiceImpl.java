@@ -36,8 +36,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Response getTransactions(String token) {
-        String id = jwtTokenUtil.getId(token.split(" ")[1].trim());
+    public Response getTransactions(String jwt) {
+        String token = jwtTokenUtil.extractTokenFromJwt(jwt);
+        String id = jwtTokenUtil.getId(token);
         return new Response(transactionRepository.findIdTransactions(id).stream().toList());
     }
 }

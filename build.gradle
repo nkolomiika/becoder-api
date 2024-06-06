@@ -27,8 +27,8 @@ dependencies {
     implementation libs.io.jsonwebtoken.jjwt
     implementation libs.javax.xml.bind.jaxb.api
     implementation libs.org.springdoc.springdoc.openapi.starter.webmvc.ui
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core'
     runtimeOnly libs.org.postgresql.postgresql
 }
 
@@ -99,6 +99,8 @@ test {
 }
 
 tasks.register('xml') {
+    description = 'Checks if all .xml files are formatted correctly.'
+    group = 'verification'
     doLast {
         def xmlFiles = fileTree(dir: '.', include: '**/*.xml')
         xmlFiles.each { File xmlFile ->
@@ -121,6 +123,9 @@ tasks.named('clean', Delete) {
 }
 
 tasks.register('scp') {
+    description = 'Moves built artifact to the server defined in properties file'
+    group = 'application'
+
     dependsOn build
     doLast {
         def jarFile = file("$layout.buildDirectory/libs/${project.name}-${version}.jar")
@@ -156,6 +161,8 @@ tasks.register('generateJavadoc', Javadoc) {
 }
 
 tasks.register('doc') {
+    description = 'Generates Javadoc and adds M5 + SHA-1 checksums.'
+    group = 'documentation'
     dependsOn generateChecksums, generateJavadoc
     doLast {
         def jarFile = file("build/libs/${project.name}-${version}.jar")
@@ -181,6 +188,9 @@ tasks.register('doc') {
 }
 
 tasks.register('music') {
+    description = 'Play sound after success build.'
+    group = 'application'
+
     dependsOn build
     doLast {
         def musicFile = 'build.mp3'
@@ -191,6 +201,8 @@ tasks.register('music') {
 }
 
 tasks.register('env') {
+    description = 'Starts application with environment defined in properties file.'
+    group = 'application'
     dependsOn build
 
     def javaVersion = envProps.getProperty('javaVersion')
@@ -213,6 +225,8 @@ tasks.register('env') {
 }
 
 tasks.register('team', Zip) {
+    description = 'Collects 4 last version artifacts into zi['
+    group = 'build'
     dependsOn build
     doLast {
         def commits = 'git log --format="%H" -n 4'.execute().text.tokenize('\n')
@@ -228,6 +242,8 @@ tasks.register('team', Zip) {
 }
 
 tasks.register('diff') {
+    description = 'Creates commit if files from properties have changed'
+    group = 'version'
     doLast {
         def status = 'git status --porcelain'.execute().text
 

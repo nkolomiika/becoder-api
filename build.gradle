@@ -1,3 +1,7 @@
+import org.xml.sax.helpers.DefaultHandler
+
+import javax.xml.parsers.DocumentBuilderFactory
+
 plugins {
     id "org.springframework.boot" version "3.3.0"
     id "io.spring.dependency-management" version "1.1.5"
@@ -23,9 +27,145 @@ dependencies {
     implementation libs.io.jsonwebtoken.jjwt
     implementation libs.javax.xml.bind.jaxb.api
     implementation libs.org.springdoc.springdoc.openapi.starter.webmvc.ui
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     runtimeOnly libs.org.postgresql.postgresql
 }
 
 group = 'com.example'
-version = '0.0.1-SNAPSHOT'
+version = project.projectVersion
 description = 'becoder-api'
+
+jar {
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    from sourceSets.main.output
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': version,
+                'Main-Class': project.findProperty('mainClass')
+        )
+    }
+}
+
+tasks.register('compile', JavaCompile) {
+    description = 'Compiles the Java source files.'
+    group = 'build'
+
+    source = fileTree('src/main/java')
+    classpath = sourceSets.main.compileClasspath
+    destinationDirectory = file('build/classes')
+    options.encoding = 'UTF-8'
+    options.sourcepath = sourceSets.main.java.getSourceDirectories()
+    options.annotationProcessorPath = sourceSets.main.compileClasspath
+}
+
+tasks.named('resolveMainClassName') {
+    dependsOn compile
+}
+
+tasks.named('jar') {
+    dependsOn compile
+}
+
+tasks.register('buildJar', Jar) {
+    dependsOn compile
+    archiveBaseName.set(project.findProperty('projectName').toString())
+    archiveVersion.set(project.findProperty('projectVersion').toString())
+    with jar
+}
+
+tasks.named('build') {
+    dependsOn compile, buildJar
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.register('xml') {
+    doLast {
+        def xmlFiles = fileTree(dir: '.', include: '**/*.xml')
+        xmlFiles.each { File xmlFile ->
+            try {
+                def factory = DocumentBuilderFactory.newInstance()
+                factory.setValidating(true)
+                def builder = factory.newDocumentBuilder()
+                builder.setErrorHandler(new DefaultHandler())
+                builder.parse(xmlFile)
+            } catch (Exception e) {
+                println "Invalid: ${xmlFile} - ${e.message}"
+                throw e
+            }
+        }
+    }
+}
+
+tasks.named('clean', Delete) {
+    delete rootProject.layout.buildDirectory
+}
+
+tasks.register('scp') {
+    dependsOn build
+    doLast {
+        def jarFile = file("$layout.buildDirectory/libs/${project.name}-${version}.jar")
+        def scpUser = project.findProperty('scpUser') ?: 'username'
+        def scpHost = project.findProperty('scpHost') ?: 'example.com'
+        def scpDestDir = project.findProperty('scpDestDir') ?: '/'
+
+        exec {
+            commandLine 'scp', '-P 2222', jarFile,  "${scpUser}@${scpHost}:${scpDestDir}/${project.name}-${version}.jar"
+        }
+    }
+}
+
+tasks.register('generateChecksums', Copy) {
+    dependsOn build
+    from(tasks.jar.outputs.files)
+    into("build/libs")
+    doLast {
+        def jarFile = file("build/libs/${project.name}-${version}.jar")
+        def md5File = file("build/libs/${project.name}-${version}.jar.md5")
+        def sha1File = file("build/libs/${project.name}-${version}.jar.sha1")
+
+        md5File.text = jarFile.bytes.encodeHex().toString()
+        sha1File.text = jarFile.bytes.digest('SHA-1').toString()
+    }
+}
+
+tasks.register('generateJavadoc', Javadoc) {
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = file("build/docs/javadoc")
+    options.encoding = 'UTF-8'
+}
+
+tasks.register('doc') {
+    dependsOn generateChecksums, generateJavadoc
+    doLast {
+        def jarFile = file("build/libs/${project.name}-${version}.jar")
+        def md5File = file("build/libs/${project.name}-${version}.jar.md5")
+        def sha1File = file("build/libs/${project.name}-${version}.jar.sha1")
+        def javadocDir = file("build/docs/javadoc")
+
+        jar {
+            from md5File
+            from sha1File
+            from javadocDir
+        }
+
+        jar {
+            manifest {
+                attributes(
+                        'MD5-Checksum': md5File.text,
+                        'SHA1-Checksum': sha1File.text
+                )
+            }
+        }
+    }
+}

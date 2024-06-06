@@ -36,6 +36,16 @@ group = 'com.example'
 version = project.projectVersion
 description = 'becoder-api'
 
+def envProps = new Properties()
+file("gradle.properties").withInputStream { inputStream ->
+    envProps.load(inputStream)
+}
+
+def diffFiles = []
+def properties = new Properties()
+file('gradle.properties').withInputStream { properties.load(it) }
+diffFiles = properties.getProperty('diffFiles')?.split(',') ?: []
+
 jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
@@ -169,3 +179,65 @@ tasks.register('doc') {
         }
     }
 }
+
+tasks.register('music') {
+    dependsOn build
+    doLast {
+        def musicFile = 'build.mp3'
+        exec {
+            commandLine 'cmd', '/c', 'start', musicFile
+        }
+    }
+}
+
+tasks.register('env') {
+    dependsOn build
+
+    def javaVersion = envProps.getProperty('javaVersion')
+
+    java {
+        sourceCompatibility = javaVersion
+
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(javaVersion)
+        }
+    }
+
+    doLast {
+        def jvmArgs = envProps.getProperty('jvmArgs')
+
+        exec {
+            commandLine 'java', '-jar', "build/libs/${project.name}-${version}.jar", jvmArgs.tokenize()
+        }
+    }
+}
+
+tasks.register('team', Zip) {
+    dependsOn build
+    doLast {
+        def commits = 'git log --format="%H" -n 4'.execute().text.tokenize('\n')
+
+        commits.each { commit ->
+            'git checkout $commit'.execute()
+            from '.'
+        }
+
+        into 'team-builds'
+        archiveFileName = 'team-builds.zip'
+    }
+}
+
+tasks.register('diff') {
+    doLast {
+        def status = 'git status --porcelain'.execute().text
+
+        def changesDetected = diffFiles.any { status.contains(it)}
+
+        if (changesDetected) {
+            def p = 'git add .'.execute()
+            p.waitFor()
+            'git commit -m "Changes detected in files specified in gradle.properties"'.execute()
+        }
+    }
+}
+

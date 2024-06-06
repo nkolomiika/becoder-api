@@ -25,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountResponse getInfoById(Request request) throws NoSuchAccountException {
         Account account = accountRepository.findAccountById(request.id())
                 .orElseThrow(NoSuchAccountException::new);
-        return new AccountResponse(account.getId(), account.getBalance()) ;
+        return new AccountResponse(account.getId(), account.getBalance());
     }
 
     @Override

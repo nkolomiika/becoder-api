@@ -5,5 +5,6 @@ import com.example.becoderapi.model.dto.auth.AuthResponse;
 
 public interface AuthenticService {
     AuthResponse register(AuthRequest request);
+
     AuthResponse login(AuthRequest request);
 }

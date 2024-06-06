@@ -2,11 +2,11 @@ package com.example.becoderapi.utils;
 
 import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.security.JwtConfiguration;
-import io.jsonwebtoken.*;
-import jakarta.servlet.http.HttpServletRequest;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;

@@ -2,10 +2,10 @@ spring:
   application:
     name: becoder-api
   datasource:
-    #url: jdbc:postgresql://service-db:5432/postgres
-    url: jdbc:postgresql://localhost:15432/postgres
-    username: username
-    password: password
+    url: jdbc:postgresql://localhost:5432/becoder
+    #url: jdbc:postgresql://localhost:15432/postgres
+    username: postgres
+    password: admin
   jpa:
     properties:
       hibernate:
@@ -25,5 +25,3 @@ jwt:
   exp: 10080
 server:
   port: 6868
-  error:
-    include-stacktrace: never

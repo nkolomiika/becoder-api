@@ -4,6 +4,7 @@ import com.example.becoderapi.model.data.Account;
 import com.example.becoderapi.security.JwtConfiguration;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpHeaders;

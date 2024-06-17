@@ -20,5 +20,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Modifying
     @Query("UPDATE Account a SET a.balance = :sum WHERE a.id = :id")
-    void updateBalance(@Param("id") String id, @Param("sum") double sum);
+    boolean updateBalance(@Param("id") String id, @Param("sum") double sum);
 }

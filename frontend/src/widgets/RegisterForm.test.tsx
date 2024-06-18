@@ -87,6 +87,7 @@ describe('RegisterForm testing', () => {
         const usernameInput = screen.getByPlaceholderText("Username");
         const passwordInput = screen.getByPlaceholderText("Password");
         const repeatedPasswordInput = screen.getByPlaceholderText("Repeat password");
+        const errorMessage = screen.getByTitle("error-message");
         const registerButton = screen.getByTitle("register-button");
 
         fireEvent.change(usernameInput, { target: { value: "testuser" } });
@@ -100,7 +101,7 @@ describe('RegisterForm testing', () => {
                 'http://localhost:6868/api/auth/register',
                 { login: "testuser", password: "password" }
             );
-            expect(window.alert).toHaveBeenCalledWith(new Error("Registration failed"));
+            expect(errorMessage).toBeVisible()
         });
     });
 });

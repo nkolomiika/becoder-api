@@ -12,6 +12,7 @@ interface FormValues {
 export function RegisterForm() {
     const [responseBody, setResponseBody] = useState<FormValues>({username: "", password: "", repeated_password: ""})
     const navigate = useNavigate()
+    const [errors, setErrors] = useState<string[]>([])
 
     const inputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
@@ -24,10 +25,11 @@ export function RegisterForm() {
             login: responseBody.username,
             password: responseBody.password
         }).then(res => {sessionStorage.setItem("token", res.data.token); console.log(res.data.token); navigate('/')})
-            .catch(err => alert(err))
+            .catch(err => setErrors([...errors, err.message]))
     }
     return (
         <form className="flex flex-col gap-2 mt-28" onSubmit={onSubmitHandler}>
+            <div id="error-message" title="error-message" className="text-center text-red-500">{errors.length > 0 && errors[0]}</div>
             <h2 className="text-3xl text-center font-bold">Register</h2>
             <Input title='Username' name="username" onChange={inputChangeHandler}/>
             <Input title='Password' name="password" onChange={inputChangeHandler}/>

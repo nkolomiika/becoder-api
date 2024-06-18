@@ -31,6 +31,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mockito:mockito-core'
     runtimeOnly libs.org.postgresql.postgresql
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
 }
 
 group = 'com.example'

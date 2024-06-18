@@ -11,7 +11,7 @@ export function Input({title, name, onChange, placeholder = ''} : InputProps) {
     return (
         <FrameHeader title={title}>
             <input name={name} className="rounded-xl h-14 w-full text-xl px-4 text-bold" type="text"
-                   placeholder={placeholder} onChange={onChange}/>
+                   placeholder={placeholder || title} onChange={onChange}/>
         </FrameHeader>
     )
 }

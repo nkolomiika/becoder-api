@@ -32,7 +32,7 @@ export function RegisterForm() {
             <Input title='Username' name="username" onChange={inputChangeHandler}/>
             <Input title='Password' name="password" onChange={inputChangeHandler}/>
             <Input title='Repeat password' name="repeated_password" onChange={inputChangeHandler}/>
-            <button className="bg-blue-400 rounded-xl text-white p-4 text-xl font-bold curson-pointer">Register</button>
+            <button title='register-button' className="bg-blue-400 rounded-xl text-white p-4 text-xl font-bold curson-pointer">Register</button>
             <p className="text-xl">Already have an account? <NavLink to="/Login" className="underline text-orange-500">Log
                 in</NavLink></p>
         </form>

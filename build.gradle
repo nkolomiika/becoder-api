@@ -6,6 +6,7 @@ plugins {
     id "org.springframework.boot" version "3.3.0"
     id "io.spring.dependency-management" version "1.1.5"
     id 'java'
+    id 'base'
 }
 
 repositories {
@@ -98,9 +99,17 @@ tasks.named('build') {
     dependsOn compile, buildJar
 }
 
+tasks.register('testReact', Exec) {
+    workingDir 'frontend'
+    inputs.dir 'frontend'
+    commandLine 'cmd', '/c', 'npm run test'
+}
+
 test {
+    dependsOn testReact
     useJUnitPlatform()
 }
+
 
 tasks.register('xml') {
     description = 'Checks if all .xml files are formatted correctly.'

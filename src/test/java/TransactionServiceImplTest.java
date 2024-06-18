@@ -63,8 +63,6 @@ public class TransactionServiceImplTest {
         when(accountRepositoryMock.findAccountById(sellerId)).thenReturn(Optional.of(seller));
         when(jwtTokenUtilMock.extractTokenFromJwt(jwt)).thenReturn("valid-token");
         when(jwtTokenUtilMock.getId("valid-token")).thenReturn(buyerId);
-        when(transactionRepositoryMock.updateBalance(buyerId, 9900)).thenReturn(true);
-        when(transactionRepositoryMock.updateBalance(sellerId, 10100)).thenReturn(true);
         when(transactionRepositoryMock.save(any(Transaction.class))).thenReturn(transaction);
 
         TransactionResponse result = transactionService.makeContract(jwt, request);

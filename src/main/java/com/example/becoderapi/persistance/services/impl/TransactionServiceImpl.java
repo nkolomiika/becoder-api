@@ -56,8 +56,6 @@ public class TransactionServiceImpl implements TransactionService {
         buyer.setBalance(buyer.getBalance() - contractSum);
         seller.setBalance(seller.getBalance() + contractSum);
 
-        transactionRepository.updateBalance(buyer.getId(), buyer.getBalance());
-        transactionRepository.updateBalance(seller.getId(), seller.getBalance());
         return transactionRepository.save(new Transaction(
                 buyerId, request.sellerId(), contractSum
         ));

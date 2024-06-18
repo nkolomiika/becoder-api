@@ -239,7 +239,7 @@ tasks.register('env') {
 }
 
 tasks.register('team', Zip) {
-    description = 'Collects 4 last version artifacts into zi['
+    description = 'Collects 4 last version artifacts into zip'
     group = 'build'
     dependsOn build
     doLast {

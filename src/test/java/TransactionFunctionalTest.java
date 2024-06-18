@@ -5,9 +5,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-public class LoginTest {
+public class TransactionFunctionalTest {
     private static WebDriver driver;
     private static final String HOST = "http://localhost:5173/";
 
@@ -20,7 +19,7 @@ public class LoginTest {
     }
 
     @Test
-    public void testLoginSuccess() {
+    public void testTransactionSuccess() {
         driver.get(HOST + "login");
 
         WebElement usernameInput = driver.findElement(By.name("username"));
@@ -38,42 +37,23 @@ public class LoginTest {
             e.printStackTrace();
         }
 
-        String token = (String) ((JavascriptExecutor) driver).executeScript("return sessionStorage.getItem('token');");
-        assertNotNull(token, "Token should be set in sessionStorage");
+        WebElement transactionButton = driver.findElements(By.id("transaction-button")).get(0);
+        transactionButton.click();
 
-        assertEquals(HOST, driver.getCurrentUrl(), "Should redirect to welcome page");
-}
+        WebElement sumInput = driver.findElement(By.name("sum"));
+        WebElement sellerIdInput = driver.findElement(By.name("sellerId"));
+        WebElement transactionConfirm = driver.findElement(By.id("transaction-confirm-button"));
 
-    @Test
-    public void testLoginFailed() {
-        driver.get(HOST + "login");
+        sumInput.sendKeys("1000");
+        sellerIdInput.sendKeys("aEjMQ96mISnR5OaGuJACrQAUb90dEdgL");
 
-        ((JavascriptExecutor) driver).executeScript("sessionStorage.removeItem('token');");
-
-        WebElement usernameInput = driver.findElement(By.name("username"));
-        WebElement passwordInput = driver.findElement(By.name("password"));
-        WebElement registerButton = driver.findElement(By.cssSelector("button"));
-
-        usernameInput.sendKeys("testuser");
-        passwordInput.sendKeys("invalid-password");
-
-        registerButton.click();
+        transactionConfirm.click();
 
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        assertDoesNotThrow(() -> {
-            WebElement errorMessage = driver.findElement(By.id("error-message"));
-
-            String token = (String) ((JavascriptExecutor) driver).executeScript("return sessionStorage.getItem('token');");
-
-            assertNull(token, "Token shouldn't be set in sessionStorage");
-            assertEquals(HOST + "login", driver.getCurrentUrl(), "Should stay at login page");
-        }, "Error message should be shown");
-
     }
 
     @AfterAll

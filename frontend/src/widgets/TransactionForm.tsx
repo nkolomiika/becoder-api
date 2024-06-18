@@ -31,7 +31,7 @@ export function TransactionForm() {
                 <Input title="Account ID" name="sellerId" placeholder="Where to send money" onChange={inputChangeHandler}/>
                 <Input title="Amount" name="sum" placeholder="How much" onChange={inputChangeHandler}/>
             </div>
-            <button className="bg-blue-400 p-4 text-xl rounded-xl text-white font-bold">Submit</button>
+            <button id="transaction-confirm-button" className="bg-blue-400 p-4 text-xl rounded-xl text-white font-bold">Submit</button>
         </form>
     )
 }

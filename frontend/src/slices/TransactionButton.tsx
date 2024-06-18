@@ -22,7 +22,7 @@ export function TransactionButton({icon, title} : TransactionButtonProps) {
 
     return (
         <>
-        <div className="hover:scale-105 transition-all ease w-[45%] py-[20%] h-0 bg-slate-100 items-center
+        <div id="transaction-button" className="hover:scale-105 transition-all ease w-[45%] py-[20%] h-0 bg-slate-100 items-center
          rounded-xl gap-2 text-2xl flex flex-col p-2 font-bold justify-center" onClick={replaceContent}>
                 <img className="w-[40%]" src={icon} alt="transaction-icon"/>
                 <p>{title}</p>

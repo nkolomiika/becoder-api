@@ -37,7 +37,6 @@ public class TransactionServiceImplTest {
     @Mock
     private JwtTokenUtil jwtTokenUtilMock;
 
-
     private TransactionServiceImpl transactionService;
 
     @BeforeEach

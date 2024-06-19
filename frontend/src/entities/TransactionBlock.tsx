@@ -8,7 +8,7 @@ export function TransactionBlock({transaction} : {transaction: ITransaction}) {
             <div className="flex gap-x-4">
                 <img src={clockIcon} className="h-12 bg-blue-100 rounded-xl p-2" alt="transaction-icon"/>
                 <div className="flex flex-col">
-                    <span className="text-m font-bold">{transaction.sellerId}</span>
+                    <span className="transaction-seller-id text-m font-bold">{transaction.sellerId}</span>
                     <span className="text-xs">{transaction.timeInit}</span>
                 </div>
             </div>

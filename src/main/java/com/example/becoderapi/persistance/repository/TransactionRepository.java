@@ -15,7 +15,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     Optional<Transaction> findTransactionByIdTransaction(String id);
 
     @Modifying
-    @Query("SELECT t FROM Transaction t WHERE t.buyerId = :id OR t.sellerId = :id")
+    @Query("SELECT t FROM Transaction t WHERE t.buyerId = :id OR t.sellerId = :id ORDER BY t.timeInit DESC")
     List<Transaction> findIdTransactions(@Param("id") String id);
 
     @Modifying

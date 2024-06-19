@@ -17,7 +17,7 @@ export function AccountView({account} : AccountProps) {
                 transition-all ease text-xl items-center ${isHidden? 'opacity-1' : 'opacity-0'}`}>
                     Show balance
                 </div>
-                <p className="text-3xl text-white">${account.balance}</p>
+                <p id="account-balance" className="text-3xl text-white">${account.balance}</p>
             </div>
         </div>
     )

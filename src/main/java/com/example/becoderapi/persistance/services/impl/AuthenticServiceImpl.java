@@ -5,10 +5,13 @@ import com.example.becoderapi.model.dto.auth.AuthRequest;
 import com.example.becoderapi.model.dto.auth.AuthResponse;
 import com.example.becoderapi.model.exceptions.auth.NoSuchAccountException;
 import com.example.becoderapi.model.exceptions.auth.UserAlreadyExistsException;
+import com.example.becoderapi.monitoring.auth.LoginMonitor;
+import com.example.becoderapi.monitoring.auth.LoginMonitorMBean;
 import com.example.becoderapi.persistance.repository.AccountRepository;
 import com.example.becoderapi.persistance.services.AuthenticService;
 import com.example.becoderapi.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,12 @@ public class AuthenticServiceImpl implements AuthenticService {
     private final AccountRepository accountRepository;
     private final JwtTokenUtil jwtTokenUtil;
     private final BCryptPasswordEncoder bCrypt;
+    private LoginMonitor loginMonitor;
+
+    @Autowired
+    public void setLoginMonitor(LoginMonitor loginMonitor) {
+        this.loginMonitor = loginMonitor;
+    }
 
     @Override
     public AuthResponse register(AuthRequest request) {
@@ -44,8 +53,12 @@ public class AuthenticServiceImpl implements AuthenticService {
 
     @Override
     public AuthResponse login(AuthRequest request) throws NoSuchAccountException {
+        loginMonitor.incrementLoginCount();
+
         Account account = checkLoginAndPassword(request);
         String token = jwtTokenUtil.createToken(account);
+
+        loginMonitor.incrementSuccessLoginCount();
         return new AuthResponse(token);
     }
 }

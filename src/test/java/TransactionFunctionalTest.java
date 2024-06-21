@@ -64,6 +64,13 @@ public class TransactionFunctionalTest {
         alt.accept();
 
         driver.navigate().refresh();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         WebElement accountBalanceAfter = driver.findElement(By.id("account-balance"));
         long balanceAfter = Long.parseLong(accountBalanceAfter.getText().substring(1));
         Assertions.assertEquals(balance - 1000, balanceAfter, "Balance should be reduced by 1000");

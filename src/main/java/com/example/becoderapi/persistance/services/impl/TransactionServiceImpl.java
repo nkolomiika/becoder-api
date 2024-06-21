@@ -9,12 +9,14 @@ import com.example.becoderapi.model.exceptions.abstracts.TransactionRuntimeExcep
 import com.example.becoderapi.model.exceptions.auth.NoSuchAccountException;
 import com.example.becoderapi.model.exceptions.transactions.NegativeCostException;
 import com.example.becoderapi.model.exceptions.transactions.NotEnoughMoneyException;
+import com.example.becoderapi.monitoring.transactions.TransactionMonitor;
 import com.example.becoderapi.persistance.repository.AccountRepository;
 import com.example.becoderapi.persistance.repository.TransactionRepository;
 import com.example.becoderapi.persistance.services.TransactionService;
 import com.example.becoderapi.utils.JwtTokenUtil;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,12 @@ public class TransactionServiceImpl implements TransactionService {
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
     private final JwtTokenUtil jwtTokenUtil;
+    private TransactionMonitor transactionMonitor;
+
+    @Autowired
+    public void setTransactionMonitor(TransactionMonitor transactionMonitor) {
+        this.transactionMonitor = transactionMonitor;
+    }
 
     @Override
     @Transactional(rollbackFor = {TransactionRuntimeException.class})
@@ -56,9 +64,12 @@ public class TransactionServiceImpl implements TransactionService {
         buyer.setBalance(buyer.getBalance() - contractSum);
         seller.setBalance(seller.getBalance() + contractSum);
 
-        return transactionRepository.save(new Transaction(
+        Transaction transaction = transactionRepository.save(new Transaction(
                 buyerId, request.sellerId(), contractSum
         ));
+
+        transactionMonitor.incrementTransactionCount();
+        return transaction;
     }
 
     @Override
